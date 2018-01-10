@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Okhati</string>
+    <string name="Name">Name</string>
+    <string name="Age" />
+    <string name="Button">Submit</string>
+    <string name="ohYeah">ohYeah</string>
+</resources>

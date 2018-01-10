@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "585856244432",
+    "project_id": "firebase-okhati"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:585856244432:android:c9d08d5c9563c2de",
+        "android_client_info": {
+          "package_name": "com.example.ashutosh.okhati"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "585856244432-1stm3knkmutqttlbtt8tvea7gmbjs2iu.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "585856244432-s5hhte5c9nu071epaeqjbtb6d5mb4jb7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ashutosh.okhati",
+            "certificate_hash": "9b15088d2519b1b8d67b91f40bf3e010b61a3c55"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsVCdRoF1Ty0Yb5CMf6SE8HoNonXVuoas"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
