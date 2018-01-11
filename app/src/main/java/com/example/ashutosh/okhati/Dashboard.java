@@ -1,6 +1,8 @@
 package com.example.ashutosh.okhati;
 
 import android.*;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,17 +14,92 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
-public class Dashboard extends AppCompatActivity {
+public class Dashboard extends AppCompatActivity implements m.GetData, View.OnClickListener {
+
+    public String Title;
+    public String  Message;
+
+    public Double longitude;
+    public Double latitude;
+    private String postId;
+
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+            case R.id.button3:
+                Intent intent= new Intent(this,MapsActivity.class);
+                Location myLocation= mCurrentLocation;
+
+                if (mCurrentLocation!=null)
+                {
+                    intent.putExtra("location",myLocation);
+                    startActivity(intent);
+                }
+                break;
+            // ...
+            case R.id.button4:
+                FragmentManager fm=getFragmentManager();
+                Fragment frag=fm.findFragmentById(R.layout.form);
+                if (frag!=null)
+                {
+                    fm.beginTransaction().remove(frag).commit();
+                }
+
+                m dialog=new m();
+                dialog.show(fm,"form");
+                break;
+
+        }
+
+
+
+    }
+
+    @Override
+    public void onFinishUserDialog(Bundle bundle) {
+
+        Title=bundle.getString("title");
+        Message=bundle.getString("message");
+        longitude=Double.valueOf(String.valueOf(mCurrentLocation.getLongitude()));
+        latitude=Double.valueOf(String.valueOf(mCurrentLocation.getLatitude()));
+
+
+        Data data=new Data(Title,Message,longitude,latitude);
+
+        final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
+
+        DatabaseReference newPostRef = myRef.push();
+        postId = newPostRef.getKey();
+
+        myRef.child("users").child(postId).setValue(data);
+
+
+    }
 
     int REQ=1;
     private FusedLocationProviderClient mFusedLocationClient;
+    Location mCurrentLocation;
+    String currentUser;
+
+
+
+
+
+
+
+
 
     public void buildAlert()
     {
@@ -54,6 +131,11 @@ public class Dashboard extends AppCompatActivity {
 
         mFusedLocationClient= LocationServices.getFusedLocationProviderClient(this);
 
+        findViewById(R.id.button3).setOnClickListener(this);
+
+        findViewById(R.id.button4).setOnClickListener(this);
+
+
     }
 
     @Override
@@ -70,6 +152,7 @@ public class Dashboard extends AppCompatActivity {
                             if (location!=null)
                             {
                                 Log.i("longitude",location.getLongitude()+"");
+                                mCurrentLocation=location;
                             }
 
                             Log.i("ahha","lol");
@@ -115,7 +198,9 @@ public class Dashboard extends AppCompatActivity {
                     {
                         CharSequence aa=(CharSequence)(location.getLongitude()+"");
 
-                        Toast.makeText(Dashboard.this,aa,Toast.LENGTH_LONG).show();
+                        //Toast.makeText(Dashboard.this,aa,Toast.LENGTH_LONG).show();
+
+                        mCurrentLocation=location;
 
 
 

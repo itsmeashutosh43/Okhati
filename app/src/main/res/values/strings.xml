@@ -4,4 +4,9 @@
     <string name="Age" />
     <string name="Button">Submit</string>
     <string name="ohYeah">ohYeah</string>
+    <string name="Nname">Add Location</string>
+    <string name="DashBoard">My Dashboard</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="loci">Add new Location</string>
+    <string name="Title">Title</string>
 </resources>
