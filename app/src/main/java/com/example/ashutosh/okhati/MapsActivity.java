@@ -21,8 +21,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+    public interface DataRetrieve{
+        public void getData(ArrayList<Data> data);
+    }
+
+    DataRetrieve dr;
     ArrayList<Data> markersArray = new ArrayList<>();
 
     private GoogleMap mMap;
@@ -30,24 +35,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private double mLongitude;
     private double mLatitude;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-
         final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("users");
 
+        final DataRetrieve dx =new DataRetrieve() {
+            @Override
+            public void getData(ArrayList<Data> data) {
+                SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.map);
+                mapFragment.getMapAsync(MapsActivity.this);
 
+            }
+        };
 
         ValueEventListener postListener= new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Data data= dataSnapshot.getValue(Data.class);
-                markersArray.add(data);
-                if (data!=null){
-                    Toast.makeText(MapsActivity.this,"Haku",Toast.LENGTH_LONG).show();
+
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+                    Data data= dataSnapshot1.getValue(Data.class);
+                    markersArray.add(data);
                 }
+                dx.getData(markersArray);
+
+
+
+
+                Toast.makeText(MapsActivity.this,markersArray.size()+"",Toast.LENGTH_LONG).show();
+
+
             }
 
             @Override
@@ -59,21 +81,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         };
         myRef.addValueEventListener(postListener);
 
-
-
-
-
-
-
-
         //Toast.makeText(this,mCurrentLocation.getLongitude()+""+"AAshu",Toast.LENGTH_LONG).show();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
     }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+
+    }
 
     protected Marker createMarker(double latitude, double longitude, String title, String snippet) {
 
